@@ -33,7 +33,7 @@ int main() {
     GLenum err = glewInit();
 
     if (GLEW_OK != err) {
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        fprintf(stderr, "Glew errors: %s\n", glewGetErrorString(err));
         return -1;
     }
 
@@ -46,7 +46,7 @@ int main() {
     };
 
     std::string vertexShaderSource = R"(
-    #version 410 core
+    #version 400 core
 
     layout (location = 0) in vec2 a_position;
     layout (location = 1) in vec3 a_color;
@@ -60,7 +60,7 @@ int main() {
     )";
 
     std::string fragmentShaderSource = R"(
-    #version 410 core
+    #version 400 core
 
     in vec3 v_color;
 
@@ -127,7 +127,7 @@ int main() {
 
         glGetProgramInfoLog(program, 1024, &l, s);
 
-        fprintf(stderr, "Error: %s\n", s);
+        fprintf(stderr, "Program errors: %s\n", s);
 
         return -1;
     }
