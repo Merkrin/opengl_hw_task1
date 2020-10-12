@@ -14,6 +14,8 @@ int main() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 640, "Hello World", NULL, NULL);
@@ -44,6 +46,8 @@ int main() {
     };
 
     std::string vertexShaderSource = R"(
+    #version 410 core
+
     layout (location = 0) in vec2 a_position;
     layout (location = 1) in vec3 a_color;
 
@@ -56,6 +60,8 @@ int main() {
     )";
 
     std::string fragmentShaderSource = R"(
+    #version 410 core
+
     in vec3 v_color;
 
     out vec4 color;
@@ -83,7 +89,7 @@ int main() {
 
         glGetShaderInfoLog(vertexShader, 1024, &l, s);
 
-        fprintf(stderr, "Error: %s\n", s);
+        fprintf(stderr, "Vertex shader errors:\n%s\n", s);
 
         return -1;
     }
@@ -102,7 +108,7 @@ int main() {
 
         glGetShaderInfoLog(fragmentShader, 1024, &l, s);
 
-        fprintf(stderr, "Error: %s\n", s);
+        fprintf(stderr, "Fragment shader errors:\n%s\n", s);
 
         return -1;
     }
