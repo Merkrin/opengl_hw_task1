@@ -6,6 +6,9 @@
 #include <iostream>
 #include <cmath>
 
+#include "load_file.h"
+#include "opengl.h"
+
 int main() {
     GLFWwindow* window;
 
@@ -45,92 +48,26 @@ int main() {
             0.75f / sqrtf(3), -0.25f, 0.0f, 0.0f, 1.0f
     };
 
-    std::string vertexShaderSource = R"(
-    #version 400 core
+    GLuint program;
 
-    layout (location = 0) in vec2 a_position;
-    layout (location = 1) in vec3 a_color;
+    try {
+        std::string vertexShaderSource = loadFile("../src/glsl/vertex.glsl");
+        std::string fragmentShaderSource = loadFile("../src/glsl/fragment.glsl");
 
-    out vec3 v_color;
+        GLuint vertexShader = createShader(vertexShaderSource, GL_VERTEX_SHADER);
+        GLuint fragmentShader = createShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
-    void main() {
-        v_color = a_color;
-        gl_Position = vec4(a_position, 0.0, 1.0);
+        program = createProgram(vertexShader, fragmentShader);
     }
-    )";
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
 
-    std::string fragmentShaderSource = R"(
-    #version 400 core
-
-    in vec3 v_color;
-
-    out vec4 color;
-
-    void main() {
-        color = vec4(v_color, 1.0);
-    }
-    )";
-
-    const char* text;
-
-    GLint status;
-
-    text = vertexShaderSource.c_str();
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &text, NULL);
-    glCompileShader(vertexShader);
-
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-
-    if (status == GL_FALSE) {
-        char s[1024];
-        int l;
-
-        glGetShaderInfoLog(vertexShader, 1024, &l, s);
-
-        fprintf(stderr, "Vertex shader errors:\n%s\n", s);
+        glfwTerminate();
 
         return -1;
     }
 
-    text = fragmentShaderSource.c_str();
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &text, NULL);
-    glCompileShader(fragmentShader);
-
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-
-    if (status == GL_FALSE) {
-        char s[1024];
-        int l;
-
-        glGetShaderInfoLog(fragmentShader, 1024, &l, s);
-
-        fprintf(stderr, "Fragment shader errors:\n%s\n", s);
-
-        return -1;
-    }
-
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
     glUseProgram(program);
-
-    glGetProgramiv(program, GL_LINK_STATUS, &status);
-
-    if (status == GL_FALSE) {
-        char s[1024];
-        int l;
-
-        glGetProgramInfoLog(program, 1024, &l, s);
-
-        fprintf(stderr, "Program errors: %s\n", s);
-
-        return -1;
-    }
 
     GLuint vao;
     glGenVertexArrays(1, &vao);
