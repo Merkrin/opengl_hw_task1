@@ -1,8 +1,5 @@
-#ifndef TEST_LOAD_FILE_H
-#define TEST_LOAD_FILE_H
+#pragma once
 
 #include <string>
 
 std::string loadFile(const std::string& path);
-
-#endif //TEST_LOAD_FILE_H
