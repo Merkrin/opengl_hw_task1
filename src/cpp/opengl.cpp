@@ -4,10 +4,9 @@
 
 GLuint createShader(const std::string& source, GLenum type) {
     const char* data = source.data();
-    int size = source.size();
 
     GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &data, &size);
+    glShaderSource(shader, 1, &data, nullptr);
     glCompileShader(shader);
 
     GLint status;
