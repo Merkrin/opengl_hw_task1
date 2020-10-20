@@ -88,11 +88,11 @@ int main() {
         std::string vertexShaderSource = loadText("../src/glsl/vertex.glsl");
         std::string fragmentShaderSource = loadText("../src/glsl/fragment.glsl");
 
-        // Create the OpenGL shaders
+        // Create the OpenGL shaders (see the implementation)
         GLuint vertexShader = createShader(vertexShaderSource, GL_VERTEX_SHADER);
         GLuint fragmentShader = createShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
-        // Create the OpenGL program
+        // Create the OpenGL program (see the implementation)
         program = createProgram(vertexShader, fragmentShader);
     }
     catch (const std::exception& e) {

@@ -5,14 +5,18 @@
 GLuint createShader(const std::string& source, GLenum type) {
     const char* data = source.data();
 
+    // Create the shader, set the shader source and compile the shader
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, &data, nullptr);
     glCompileShader(shader);
 
+    //The shader compilation status
     GLint status;
 
+    // Get the shader compilation status
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
+    // Throw the exception with the shader compilation log if the shader isn't compiled
     if (status == GL_FALSE) {
         GLint length;
 
@@ -39,15 +43,19 @@ GLuint createShader(const std::string& source, GLenum type) {
 }
 
 GLuint createProgram(GLuint vertexShader, GLuint fragmentShader) {
+    // Create the program, attach the shaders and link the program
     GLuint program = glCreateProgram();
     glAttachShader(program, vertexShader);
     glAttachShader(program, fragmentShader);
     glLinkProgram(program);
 
+    // The program linking status
     GLint status;
 
+    // Get the program linking status
     glGetProgramiv(program, GL_LINK_STATUS, &status);
 
+    // Throw the exception with the program linking log if the program isn't linked
     if (status == GL_FALSE) {
         GLint length;
 

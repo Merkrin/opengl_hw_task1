@@ -2,6 +2,9 @@
 
 #include <string>
 
+/**
+ * The exception with the custom message
+ */
 class Exception : public std::exception {
 
 private:
@@ -10,8 +13,16 @@ private:
 
 public:
 
-    explicit Exception(std::string  message);
+    /**
+     * Constructor
+     * @param message the custom message
+     */
+    explicit Exception(std::string message);
 
+    /**
+     * Returns the custom message
+     * @return the custom message
+     */
     const char* what() const noexcept override;
 
 };
