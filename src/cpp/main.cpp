@@ -71,13 +71,29 @@ int main() {
     }
 
     // The interleaved coordinates and colors of the triangle vertices
-    GLfloat vertices[] {
-        0.0f, 0.5f, // The upper vertex coordinates
+    GLfloat triangleVertices[] {
+        -0.5f, 0.5f, // The upper vertex coordinates
         1.0f, 0.0f, 0.0f, // The upper vertex color (red)
-        -0.75f / sqrtf(3), // The left vertex coordinates
-        -0.25f, 0.0f, 1.0f, 0.0f, // The left vertex color (green)
-        0.75f / sqrtf(3), // The right vertex coordinates
-        -0.25f, 0.0f, 0.0f, 1.0f // The right vertex color (blue)
+        -0.5f - 0.75f / sqrtf(3), -0.25f, // The left vertex coordinates
+        0.0f, 1.0f, 0.0f, // The left vertex color (green)
+        -0.5f + 0.75f / sqrtf(3), -0.25f, // The right vertex coordinates
+        0.0f, 0.0f, 1.0f // The right vertex color (blue)
+    };
+
+    // The coordinates of the square vertices
+    GLfloat squareCoordinates[] {
+        0.1f, 0.4f, // The upper left vertex coordinates
+        0.1f, -0.4f, // The lower left vertex coordinates
+        0.9f, 0.4f, // The upper right vertex coordinates
+        0.9f, -0.4f // The lower right vertex coordinates
+    };
+
+    // The colors of the square vertices
+    GLfloat squareColors[] {
+        1.0f, 1.0f, 1.0f, // The upper left vertex color
+        1.0f, 1.0f, 0.0f, // The lower left vertex color
+        0.0f, 1.0f, 1.0f, // The upper right vertex color
+        1.0f, 0.0f, 1.0f // The lower right vertex color
     };
 
     // The OpenGL program
@@ -105,16 +121,16 @@ int main() {
     // Use the created program for drawing
     glUseProgram(program);
 
-    // Create and bind the OpenGL vertex array object
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    // Create and bind the OpenGL vertex array object for the triangle
+    GLuint triangleVao;
+    glGenVertexArrays(1, &triangleVao);
+    glBindVertexArray(triangleVao);
 
-    // Create, bind and fill the OpenGL vertex buffer object
-    GLuint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 3 * 5 * sizeof(GLfloat), &vertices, GL_STATIC_DRAW);
+    // Create, bind and fill the OpenGL vertex buffer object for the triangle
+    GLuint triangleVbo;
+    glGenBuffers(1, &triangleVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
+    glBufferData(GL_ARRAY_BUFFER, 3 * 5 * sizeof(GLfloat), &triangleVertices, GL_STATIC_DRAW);
 
     // Enable the a_position attribute and specify how the data from the vertex buffer object is assigned to it
     glEnableVertexAttribArray(0);
@@ -124,13 +140,47 @@ int main() {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*) (2 * sizeof(GLfloat)));
 
+    // Create and bind the OpenGL vertex array object for the square
+    GLuint squareVao;
+    glGenVertexArrays(1, &squareVao);
+    glBindVertexArray(squareVao);
+
+    // Create the OpenGL vertex buffer objects for the square
+    GLuint squareVbo[2];
+    glGenBuffers(2, squareVbo);
+
+    // Bind and fill the vertex buffer object for the coordinates of the square vertices
+    glBindBuffer(GL_ARRAY_BUFFER, squareVbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(GLfloat), &squareCoordinates, GL_STATIC_DRAW);
+
+    // Enable the a_position attribute and specify how the data from the vertex buffer object is assigned to it
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+    // Bind and fill the vertex buffer object for the colors of the square vertices
+    glBindBuffer(GL_ARRAY_BUFFER, squareVbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, 4 * 3 * sizeof(GLfloat), &squareColors, GL_STATIC_DRAW);
+
+    // Enable the a_color attribute and specify how the data from the vertex buffer object is assigned to it
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         // Clear the drawing area
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Bind the vertex array object for the triangle
+        glBindVertexArray(triangleVao);
+
         // Draw the triangle
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // Bind the vertex array object for the square
+        glBindVertexArray(squareVao);
+
+        // Draw the square
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
