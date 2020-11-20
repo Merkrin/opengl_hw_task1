@@ -72,28 +72,28 @@ int main() {
 
     // The interleaved coordinates and colors of the triangle vertices
     GLfloat triangleVertices[] {
-        -0.5f, 0.5f, // The upper vertex coordinates
-        1.0f, 0.0f, 0.0f, // The upper vertex color (red)
-        -0.5f - 0.75f / sqrtf(3), -0.25f, // The left vertex coordinates
-        0.0f, 1.0f, 0.0f, // The left vertex color (green)
-        -0.5f + 0.75f / sqrtf(3), -0.25f, // The right vertex coordinates
-        0.0f, 0.0f, 1.0f // The right vertex color (blue)
+        -0.5, 0.5, // The upper vertex coordinates
+        1, 0, 0, // The upper vertex color (red)
+        -0.5f - 0.75f / std::sqrt(3.0f), -0.25, // The left vertex coordinates
+        0, 1, 0, // The left vertex color (green)
+        -0.5f + 0.75f / std::sqrt(3.0f), -0.25, // The right vertex coordinates
+        0, 0, 1 // The right vertex color (blue)
     };
 
     // The coordinates of the square vertices
     GLfloat squareCoordinates[] {
-        0.1f, 0.4f, // The upper left vertex coordinates
-        0.1f, -0.4f, // The lower left vertex coordinates
-        0.9f, 0.4f, // The upper right vertex coordinates
-        0.9f, -0.4f // The lower right vertex coordinates
+        0.1, 0.4, // The upper left vertex coordinates
+        0.1, -0.4, // The lower left vertex coordinates
+        0.9, 0.4, // The upper right vertex coordinates
+        0.9, -0.4 // The lower right vertex coordinates
     };
 
     // The colors of the square vertices
     GLfloat squareColors[] {
-        1.0f, 1.0f, 1.0f, // The upper left vertex color
-        1.0f, 1.0f, 0.0f, // The lower left vertex color
-        0.0f, 1.0f, 1.0f, // The upper right vertex color
-        1.0f, 0.0f, 1.0f // The lower right vertex color
+        1, 1, 1, // The upper left vertex color
+        1, 1, 0, // The lower left vertex color
+        0, 1, 1, // The upper right vertex color
+        1, 0, 1 // The lower right vertex color
     };
 
     // The OpenGL program
