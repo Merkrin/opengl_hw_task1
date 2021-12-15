@@ -1,4 +1,4 @@
-# Задание 1 по OpenGL 2020-2021
+# Задание 1 по OpenGL 2021-2022
 ## Текст задания
 https://docs.google.com/document/d/1a9qZ5VoqF0F5nMP9ukk2QmkTHqpAasWcsdK8sAPk3Hs/edit?usp=sharing
 ## Инструкция по запуску проектов
