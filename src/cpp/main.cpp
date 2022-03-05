@@ -9,6 +9,9 @@
 #include "files.h"
 #include "opengl.h"
 
+#include "utils.h"
+#include "figure.h"
+
 // If you want to implement keyboard controls, look how to process keyboard events using the GLFW library
 // https://www.glfw.org/docs/latest/quick.html#quick_key_input
 //
@@ -26,11 +29,13 @@
 //     ...
 // }
 
-void glfwErrorCallback(int error, const char* description) {
+void glfwErrorCallback(int error, const char* description)
+{
     std::cerr << "The GLFW function call completed with errors:\n" << description << std::endl;
 }
 
-int main() {
+int main()
+{
     // Set the GLFW error callback
     glfwSetErrorCallback(glfwErrorCallback);
 
@@ -49,7 +54,8 @@ int main() {
     GLFWwindow* window = glfwCreateWindow(640, 640, "Task 1", nullptr, nullptr);
 
     // Close the application if the window isn't created
-    if (!window) {
+    if (!window)
+    {
         glfwTerminate();
         return -1;
     }
@@ -64,42 +70,139 @@ int main() {
     GLenum glewStatus = glewInit();
 
     // Close the application if the GLEW library isn't initialized
-    if (glewStatus != GLEW_OK) {
+    if (glewStatus != GLEW_OK)
+    {
         std::cerr << "The GLEW initialization completed with errors:\n" << glewGetErrorString(glewStatus) << std::endl;
         glfwTerminate();
         return -1;
     }
 
-    // The interleaved coordinates and colors of the triangle vertices
-    GLfloat triangleVertices[] {
-        -0.5, 0.5, // The upper vertex coordinates
-        1, 0, 0, // The upper vertex color (red)
-        -0.5f - 0.75f / std::sqrt(3.0f), -0.25, // The left vertex coordinates
-        0, 1, 0, // The left vertex color (green)
-        -0.5f + 0.75f / std::sqrt(3.0f), -0.25, // The right vertex coordinates
-        0, 0, 1 // The right vertex color (blue)
+    GLfloat backgroundCoordinates[]{
+            utils::intCoordinateToFloat(-10), utils::intCoordinateToFloat(10),
+            utils::intCoordinateToFloat(-10), utils::intCoordinateToFloat(-10),
+            utils::intCoordinateToFloat(10), utils::intCoordinateToFloat(10),
+            utils::intCoordinateToFloat(10), utils::intCoordinateToFloat(-10)
     };
 
-    // The coordinates of the square vertices
-    GLfloat squareCoordinates[] {
-        0.1, 0.4, // The upper left vertex coordinates
-        0.1, -0.4, // The lower left vertex coordinates
-        0.9, 0.4, // The upper right vertex coordinates
-        0.9, -0.4 // The lower right vertex coordinates
+    GLfloat backgroundColors[]{
+            utils::intColorToFloat(66), utils::intColorToFloat(212), utils::intColorToFloat(207),
+            utils::intColorToFloat(66), utils::intColorToFloat(180), utils::intColorToFloat(212),
+            utils::intColorToFloat(66), utils::intColorToFloat(141), utils::intColorToFloat(212),
+            utils::intColorToFloat(66), utils::intColorToFloat(102), utils::intColorToFloat(212),
     };
 
-    // The colors of the square vertices
-    GLfloat squareColors[] {
-        1, 1, 1, // The upper left vertex color
-        1, 1, 0, // The lower left vertex color
-        0, 1, 1, // The upper right vertex color
-        1, 0, 1 // The lower right vertex color
+    GLfloat grassCoordinates[]{
+            utils::intCoordinateToFloat(-10), utils::intCoordinateToFloat(-4),
+            utils::intCoordinateToFloat(-10), utils::intCoordinateToFloat(-10),
+            utils::intCoordinateToFloat(10), utils::intCoordinateToFloat(-4),
+            utils::intCoordinateToFloat(10), utils::intCoordinateToFloat(-10)
     };
+
+    GLfloat grassColors[]{
+            utils::intColorToFloat(75), utils::intColorToFloat(156), utils::intColorToFloat(31),
+            utils::intColorToFloat(30), utils::intColorToFloat(173), utils::intColorToFloat(14),
+            utils::intColorToFloat(28), utils::intColorToFloat(128), utils::intColorToFloat(17),
+            utils::intColorToFloat(73), utils::intColorToFloat(179), utils::intColorToFloat(91)
+    };
+
+    GLfloat houseCoordinates[]{
+            utils::intCoordinateToFloat(-7), utils::intCoordinateToFloat(2),
+            utils::intCoordinateToFloat(-7), utils::intCoordinateToFloat(-5),
+            utils::intCoordinateToFloat(5), utils::intCoordinateToFloat(2),
+            utils::intCoordinateToFloat(5), utils::intCoordinateToFloat(-5)
+    };
+
+    GLfloat houseColors[]{
+            utils::intColorToFloat(217), utils::intColorToFloat(199), utils::intColorToFloat(130),
+            utils::intColorToFloat(217), utils::intColorToFloat(199), utils::intColorToFloat(130),
+            utils::intColorToFloat(217), utils::intColorToFloat(199), utils::intColorToFloat(130),
+            utils::intColorToFloat(217), utils::intColorToFloat(199), utils::intColorToFloat(130)
+    };
+
+    GLfloat roadCoordinates[]{
+            utils::intCoordinateToFloat(-2), utils::intCoordinateToFloat(-5),
+            utils::intCoordinateToFloat(-7), utils::intCoordinateToFloat(-10),
+            utils::intCoordinateToFloat(0), utils::intCoordinateToFloat(-5),
+            utils::intCoordinateToFloat(5), utils::intCoordinateToFloat(-10)
+    };
+
+    GLfloat roadColors[]{
+            utils::intColorToFloat(163), utils::intColorToFloat(137), utils::intColorToFloat(126),
+            utils::intColorToFloat(163), utils::intColorToFloat(137), utils::intColorToFloat(126),
+            utils::intColorToFloat(163), utils::intColorToFloat(137), utils::intColorToFloat(126),
+            utils::intColorToFloat(163), utils::intColorToFloat(137), utils::intColorToFloat(126)
+    };
+
+    GLfloat doorCoordinates[]{
+            utils::intCoordinateToFloat(-2), utils::intCoordinateToFloat(-2),
+            utils::intCoordinateToFloat(0), utils::intCoordinateToFloat(-2),
+            utils::intCoordinateToFloat(-2), utils::intCoordinateToFloat(-5),
+            utils::intCoordinateToFloat(0), utils::intCoordinateToFloat(-5)
+    };
+
+    GLfloat doorColors[]{
+            utils::intColorToFloat(162), utils::intColorToFloat(169), utils::intColorToFloat(171),
+            utils::intColorToFloat(162), utils::intColorToFloat(169), utils::intColorToFloat(171),
+            utils::intColorToFloat(162), utils::intColorToFloat(169), utils::intColorToFloat(171),
+            utils::intColorToFloat(162), utils::intColorToFloat(169), utils::intColorToFloat(171)
+    };
+
+    GLfloat windowCoordinates[]{
+            utils::intCoordinateToFloat(1), utils::intCoordinateToFloat(0),
+            utils::intCoordinateToFloat(1), utils::intCoordinateToFloat(-2),
+            utils::intCoordinateToFloat(3), utils::intCoordinateToFloat(0),
+            utils::intCoordinateToFloat(3), utils::intCoordinateToFloat(-2)
+    };
+
+    GLfloat windowColors[]{
+            utils::intColorToFloat(255), utils::intColorToFloat(253), utils::intColorToFloat(112),
+            utils::intColorToFloat(219), utils::intColorToFloat(217), utils::intColorToFloat(194),
+            utils::intColorToFloat(255), utils::intColorToFloat(253), utils::intColorToFloat(112),
+            utils::intColorToFloat(219), utils::intColorToFloat(217), utils::intColorToFloat(194)
+    };
+
+    GLfloat roofCoordinates[]{
+            utils::intCoordinateToFloat(-7), utils::intCoordinateToFloat(2),
+            utils::intCoordinateToFloat(-1), utils::intCoordinateToFloat(5),
+            utils::intCoordinateToFloat(5), utils::intCoordinateToFloat(2)
+    };
+
+    GLfloat roofColors[]{
+            utils::intColorToFloat(166), utils::intColorToFloat(22), utils::intColorToFloat(22),
+            utils::intColorToFloat(191), utils::intColorToFloat(83), utils::intColorToFloat(47),
+            utils::intColorToFloat(240), utils::intColorToFloat(93), utils::intColorToFloat(14)
+    };
+
+    GLfloat sunCoordinates[]{
+            utils::intCoordinateToFloat(7), utils::intCoordinateToFloat(9),
+            utils::intCoordinateToFloat(8), utils::intCoordinateToFloat(9),
+            utils::intCoordinateToFloat(9), utils::intCoordinateToFloat(8),
+            utils::intCoordinateToFloat(9), utils::intCoordinateToFloat(7),
+            utils::intCoordinateToFloat(8), utils::intCoordinateToFloat(6),
+            utils::intCoordinateToFloat(7), utils::intCoordinateToFloat(6),
+            utils::intCoordinateToFloat(6), utils::intCoordinateToFloat(7),
+            utils::intCoordinateToFloat(6), utils::intCoordinateToFloat(8),
+            utils::intCoordinateToFloat(7), utils::intCoordinateToFloat(9)
+    };
+
+    GLfloat sunColors[]{
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0),
+            utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0)
+    };
+
 
     // The OpenGL program
     GLuint program;
 
-    try {
+    try
+    {
         // Load the shader source
         std::string vertexShaderSource = loadText("../src/glsl/vertex.glsl");
         std::string fragmentShaderSource = loadText("../src/glsl/fragment.glsl");
@@ -111,7 +214,8 @@ int main() {
         // Create the OpenGL program (see the implementation)
         program = createProgram(vertexShader, fragmentShader);
     }
-    catch (const std::exception& e) {
+    catch (const std::exception& e)
+    {
         // Close the application if there is an error while loading the files, compiling the shaders or linking the program
         std::cerr << e.what() << std::endl;
         glfwTerminate();
@@ -121,7 +225,7 @@ int main() {
     // Use the created program for drawing
     glUseProgram(program);
 
-    // Create and bind the OpenGL vertex array object for the triangle
+    /*// Create and bind the OpenGL vertex array object for the triangle
     GLuint triangleVao;
     glGenVertexArrays(1, &triangleVao);
     glBindVertexArray(triangleVao);
@@ -138,49 +242,77 @@ int main() {
 
     // Enable the a_color attribute and specify how the data from the vertex buffer object is assigned to it
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*) (2 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*) (2 * sizeof(GLfloat)));*/
 
-    // Create and bind the OpenGL vertex array object for the square
-    GLuint squareVao;
-    glGenVertexArrays(1, &squareVao);
-    glBindVertexArray(squareVao);
+    // Background
+    figure background = figure(backgroundCoordinates,
+                               sizeof(backgroundCoordinates) / sizeof(*backgroundCoordinates) / 2 * 5,
+                               backgroundColors);
+    background.setupFigure();
 
-    // Create the OpenGL vertex buffer objects for the square
-    GLuint squareVbo[2];
-    glGenBuffers(2, squareVbo);
+    figure grass = figure(grassCoordinates,
+                          sizeof(grassCoordinates) / sizeof(*grassCoordinates) / 2 * 5,
+                          grassColors);
+    grass.setupFigure();
 
-    // Bind and fill the vertex buffer object for the coordinates of the square vertices
-    glBindBuffer(GL_ARRAY_BUFFER, squareVbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(GLfloat), &squareCoordinates, GL_STATIC_DRAW);
+    figure house = figure(houseCoordinates,
+                          sizeof(houseCoordinates) / sizeof(*houseCoordinates) / 2 * 5,
+                          houseColors);
+    house.setupFigure();
 
-    // Enable the a_position attribute and specify how the data from the vertex buffer object is assigned to it
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    figure road = figure(roadCoordinates,
+                         sizeof(roadCoordinates) / sizeof(*roadCoordinates) / 2 * 5,
+                         roadColors);
+    road.setupFigure();
 
-    // Bind and fill the vertex buffer object for the colors of the square vertices
-    glBindBuffer(GL_ARRAY_BUFFER, squareVbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 3 * sizeof(GLfloat), &squareColors, GL_STATIC_DRAW);
 
-    // Enable the a_color attribute and specify how the data from the vertex buffer object is assigned to it
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+    figure door = figure(doorCoordinates,
+                         sizeof(doorCoordinates) / sizeof(*doorCoordinates) / 2 * 5,
+                         doorColors);
+    door.setupFigure();
+
+    figure windowFigure = figure(windowCoordinates,
+                         sizeof(windowCoordinates) / sizeof(*windowCoordinates) / 2 * 5,
+                         windowColors);
+    windowFigure.setupFigure();
+
+    figure roof = figure(roofCoordinates,
+                                 sizeof(roofCoordinates) / sizeof(*roofCoordinates) / 2 * 5,
+                                 roofColors);
+    roof.setupFigure();
+
+    figure sun = figure(sunCoordinates,
+                         sizeof(sunCoordinates) / sizeof(*sunCoordinates) / 2 * 5,
+                         sunColors);
+    sun.setupFigure();
 
     // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         // Clear the drawing area
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Bind the vertex array object for the triangle
+        background.drawFigure(1);
+
+        grass.drawFigure(1);
+
+        house.drawFigure(1);
+
+        road.drawFigure(1);
+
+        door.drawFigure(1);
+
+        windowFigure.drawFigure(1);
+
+        roof.drawFigure(0);
+
+        sun.drawFigure(2);
+
+        /*// Bind the vertex array object for the triangle
         glBindVertexArray(triangleVao);
 
         // Draw the triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        // Bind the vertex array object for the square
-        glBindVertexArray(squareVao);
-
-        // Draw the square
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glDrawArrays(GL_TRIANGLES, 0, 3);*/
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
