@@ -4,30 +4,12 @@
 #include <GL/glew.h>
 
 #include <iostream>
-#include <cmath>
 
 #include "files.h"
 #include "opengl.h"
 
 #include "utils.h"
 #include "figure.h"
-
-// If you want to implement keyboard controls, look how to process keyboard events using the GLFW library
-// https://www.glfw.org/docs/latest/quick.html#quick_key_input
-//
-// If you want to implement animation, look how to get the time since initialization using the GLFW library
-// https://www.glfw.org/docs/latest/quick.html#quick_timer
-//
-// You can calculate the delta time like that:
-//
-// double time = glfwGetTime();
-// ...
-// while (!glfwWindowShouldClose(window)) {
-//     double newTime = glfwGetTime();
-//     double deltaTime = newTime - time;
-//     time = newTime;
-//     ...
-// }
 
 void glfwErrorCallback(int error, const char* description)
 {
@@ -85,10 +67,10 @@ int main()
     };
 
     GLfloat backgroundColors[]{
-            utils::intColorToFloat(66), utils::intColorToFloat(212), utils::intColorToFloat(207),
-            utils::intColorToFloat(66), utils::intColorToFloat(180), utils::intColorToFloat(212),
-            utils::intColorToFloat(66), utils::intColorToFloat(141), utils::intColorToFloat(212),
             utils::intColorToFloat(66), utils::intColorToFloat(102), utils::intColorToFloat(212),
+            utils::intColorToFloat(66), utils::intColorToFloat(102), utils::intColorToFloat(212),
+            utils::intColorToFloat(66), utils::intColorToFloat(212), utils::intColorToFloat(207),
+            utils::intColorToFloat(66), utils::intColorToFloat(212), utils::intColorToFloat(207)
     };
 
     GLfloat grassCoordinates[]{
@@ -197,7 +179,6 @@ int main()
             utils::intColorToFloat(255), utils::intColorToFloat(230), utils::intColorToFloat(0)
     };
 
-
     // The OpenGL program
     GLuint program;
 
@@ -225,26 +206,6 @@ int main()
     // Use the created program for drawing
     glUseProgram(program);
 
-    /*// Create and bind the OpenGL vertex array object for the triangle
-    GLuint triangleVao;
-    glGenVertexArrays(1, &triangleVao);
-    glBindVertexArray(triangleVao);
-
-    // Create, bind and fill the OpenGL vertex buffer object for the triangle
-    GLuint triangleVbo;
-    glGenBuffers(1, &triangleVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
-    glBufferData(GL_ARRAY_BUFFER, 3 * 5 * sizeof(GLfloat), &triangleVertices, GL_STATIC_DRAW);
-
-    // Enable the a_position attribute and specify how the data from the vertex buffer object is assigned to it
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*) 0);
-
-    // Enable the a_color attribute and specify how the data from the vertex buffer object is assigned to it
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*) (2 * sizeof(GLfloat)));*/
-
-    // Background
     figure background = figure(backgroundCoordinates,
                                sizeof(backgroundCoordinates) / sizeof(*backgroundCoordinates) / 2 * 5,
                                backgroundColors);
@@ -307,12 +268,6 @@ int main()
         roof.drawFigure(0);
 
         sun.drawFigure(2);
-
-        /*// Bind the vertex array object for the triangle
-        glBindVertexArray(triangleVao);
-
-        // Draw the triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);*/
 
         // Swap front and back buffers
         glfwSwapBuffers(window);

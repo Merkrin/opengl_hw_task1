@@ -5,10 +5,11 @@
 
 void figure::setupFigure()
 {
+    // Bind the OpenGL vertex array object for the figure
     glGenVertexArrays(1, &figureVao);
     glBindVertexArray(figureVao);
 
-    // Create, bind and fill the OpenGL vertex buffer object for the triangle
+    // Create, bind and fill the OpenGL vertex buffer object for the figure
     GLuint figureVbo;
     glGenBuffers(1, &figureVbo);
     glBindBuffer(GL_ARRAY_BUFFER, figureVbo);
@@ -51,10 +52,10 @@ void figure::drawFigure(int usage) const
     glBindVertexArray(figureVao);
 
     // Draw the square depending on usage type
-    if(usage == 0)
+    if (usage == 0)
         glDrawArrays(GL_TRIANGLES, 0, coordinatesAmount / 5);
-    else if(usage == 1)
+    else if (usage == 1)
         glDrawArrays(GL_TRIANGLE_STRIP, 0, coordinatesAmount / 5);
-    else if(usage == 2)
+    else if (usage == 2)
         glDrawArrays(GL_TRIANGLE_FAN, 0, coordinatesAmount / 5);
 }

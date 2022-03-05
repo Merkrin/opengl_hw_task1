@@ -7,12 +7,7 @@
 #define GLFW_INCLUDE_NONE
 
 #include <GLFW/glfw3.h>
-#include <GL/glew.h>
 
-#include <iostream>
-#include <cmath>
-
-#include "files.h"
 #include "opengl.h"
 
 #include "opengl.h"
@@ -20,19 +15,20 @@
 class figure
 {
 private:
-    GLfloat * figureCoordinates;
+    GLfloat* figureCoordinates;
     int coordinatesAmount;
 
     GLuint figureVao{};
 
 public:
-    figure(const GLfloat * figureCoordinates, int coordinatesAmount, const GLfloat * figureColors);
+    figure(const GLfloat* figureCoordinates, int coordinatesAmount, const GLfloat* figureColors);
 
     void setupFigure();
 
     void drawFigure(int usage) const;
 
-    ~figure(){
+    ~figure()
+    {
         delete figureCoordinates;
     }
 };

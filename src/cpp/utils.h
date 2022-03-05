@@ -15,6 +15,7 @@ private:
 
 public:
     static float intColorToFloat(int color);
+
     static float intCoordinateToFloat(int coordinate);
 };
 
